@@ -1,0 +1,40 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block tittle%}Articulos Coleccionables{% endblock %}</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="row py-3">
+        {% for product in products %}
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{{product.imageURL}}">
+            <div class="box-element product">
+                <h6><strong>{{product.name}}</strong></h6>
+                <hr>
+                <button class="btn btn-warning add-btn update-cart " data-product={{product.id}}
+                    data-action="add">Agregar al carro</button>
+                <a href="{% url 'product-detail' product.slug %}" class="btn btn-success">Ver</a>
+                {% if product.offer_price %}
+                <h4><s>${{product.price|intcomma}}</s> ${{product.offer_price|intcomma}}</h4>
+                {% else %}
+                <h4>${{product.price|intcomma}}</h4>
+                {% endif %}
+
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock content %}
+</body>
+
+</html>

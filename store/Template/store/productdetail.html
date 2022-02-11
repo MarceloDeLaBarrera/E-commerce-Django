@@ -1,0 +1,56 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+
+    <div class="row mt-3">
+        <hr>
+        <h2><strong>{{product.name}}</strong></h2>
+        <br><br>
+        <hr>
+        <div class="col-md-6 pe-5">
+            <img class="img-fluid" src="{{product.imageURL}}">
+        </div>
+        <div class="col-md-6 pe-5">
+            <h3>{{product.name}}</h3>
+            <h6 class="badge bg-primary rounded-pill">Categoría | {{product.category}}</h6>
+            {% if product.offer_price %}
+            <h5>Precio: <s>${{product.price|intcomma}}</s> ${{product.offer_price|intcomma}}</h5>
+            {% else %}
+            <h5>Precio: {{product.price|intcomma}}</h5>
+            {% endif %}
+            <br>
+            {% if product.view_count > 1 or product.view_count == 0 %}
+            <h6>Visto {{product.view_count}} veces.</h6>
+            {% else %}
+            <h6>Visto {{product.view_count}} vez.</h6>
+            {% endif %}
+            <hr>
+            <h5>{{product.description}}</h5>
+            <hr>
+            <button class="btn btn-warning ">Agregar al carro</button>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+    {% endblock %}
+</body>
+
+</html>

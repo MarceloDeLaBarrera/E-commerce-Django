@@ -1,0 +1,119 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    {% block content %}
+    <div class="row  py-3">
+        <div class="col-lg-12">
+            <div class="box-element">
+                <a href="{% url 'store' %}" class="btn btn-warning">&#x2190; Volver a la tienda</a>
+            </div>
+            <br>
+            <table class="table">
+                <tr>
+                    <th>
+                        <h5>Articulos: <strong>{{order.get_cart_items}}</strong></h5>
+                    </th>
+                    <th>
+                        <h5>Total: <strong>${{order.get_cart_total|intcomma}}</strong></h5>
+                    </th>
+                    <th>
+                        <p class="btn-checkout"><a href="{% url 'checkout' %}"
+                                class="btn btn-primary btn-checkout">Pagar</a></p>
+                    </th>
+                </tr>
+            </table>
+
+            <div class="class box-element">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                        <tr>
+                            <td class="product-thumbnail">
+                                <img src="{{item.product.imageURL}}" class="row-image">
+                            </td>
+                            <td class="product-name">
+                                <h2 class="h5 text-black">{{item.product.name}}</h2>
+                            </td>
+                            {% if item.product.offer_price %}
+                            <td>${{item.product.offer_price|intcomma}}</td>
+                            {% else %}
+                            <td>${{item.product.price|intcomma}}</td>
+                            {% endif %}
+                            <td>
+                                <div class="input-group mb-3" style="max-width: 120px;">
+                                    <div class="input-group-pretend">
+                                        <a href="#" class="btn btn-outline-primary">
+                                            &minus;
+                                        </a>
+                                    </div>
+                                    <input type="text" class="form-control text-center" value="{{item.quantity}}">
+                                    <div class="input-group-append">
+                                        <a href="#" class="btn btn-outline-primary">&plus;</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>${{item.get_subtotal|intcomma}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!--
+                <div class="cart-row">
+                    <div style="flex: 2;"><strong>Imagen</strong></div>
+                    <div style="flex: 2;"><strong>Articulo</strong></div>
+                    <div style="flex: 1;"><strong>Precio</strong></div>
+                    <div style="flex: 1;"><strong>Cantidad</strong></div>
+                    <div style="flex: 1;"><strong>Total</strong></div>
+                </div>
+                <div class="cart-row">
+                    <div style="flex: 2;"><img class="img-fluid" src="{% static 'image/placeholder.png' %}"></div>
+                    <div style="flex: 2;"><strong>Product 1</strong></div>
+                    <div style="flex: 1;"><strong>$20</strong></div>
+                    <div style="flex: 1;">
+                        <div class="input-group" style="max-width: 120px;">
+                            <div class="input-group-pretend">
+                                <a href="#" class="btn btn-outline-primary">
+                                    &minus;
+                                </a>
+                            </div>
+                            <input type="text" class="form-control text-center" value="{{ item.quantity}}">
+                            <div class="input-group-append">
+                                <a href="#" class="btn btn-outline-primary">&plus;</a>                         
+                            </div>
+                        </div>
+                    </div>
+                    <div style="flex: 1;"><strong>$50</strong></div>
+
+
+                </div>
+                -->
+
+
+        </div>
+        {% endblock content %}
+
+</body>
+
+</html>
