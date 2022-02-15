@@ -61,14 +61,16 @@
                             {% endif %}
                             <td>
                                 <div class="input-group mb-3" style="max-width: 120px;">
-                                    <div class="input-group-pretend">
-                                        <a href="#" class="btn btn-outline-primary">
+                                    <div class="input-group-remove">
+                                        <a href="#" class="btn btn-outline-primary update-cart"
+                                            data-product={{item.product.id}} data-action="remove">
                                             &minus;
                                         </a>
                                     </div>
                                     <input type="text" class="form-control text-center" value="{{item.quantity}}">
-                                    <div class="input-group-append">
-                                        <a href="#" class="btn btn-outline-primary">&plus;</a>
+                                    <div class="input-group-add">
+                                        <a href="#" class="btn btn-outline-primary update-cart"
+                                            data-product={{item.product.id}} data-action="add">&plus;</a>
                                     </div>
                                 </div>
                             </td>

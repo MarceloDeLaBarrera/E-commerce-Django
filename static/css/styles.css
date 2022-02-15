@@ -103,19 +103,6 @@ p.btn-checkout{
 }
 
 
-.chg-quantity{
-	width: 12px;
-	cursor: pointer;
-	display: block;
-	margin-top: 5px;
-	transition:.1s;
-}
-
-.chg-quantity:hover{
-	opacity: .6;
-}
-
-
 .hidden{
 	display: none!important;
 }
@@ -135,3 +122,16 @@ p.btn-checkout{
 	height:30px;
 }
 
+/*
+.chg-quantity{
+	width: 12px;
+	cursor: pointer;
+	display: block;
+	margin-top: 5px;
+	transition:.1s;
+}
+
+.chg-quantity:hover{
+	opacity: .6;
+}
+*/
