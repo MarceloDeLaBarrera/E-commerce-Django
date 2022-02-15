@@ -58,6 +58,7 @@
             <br>
             <div class="box-element hidden" id="payment-info">
                 <small>Paypal options</small>
+                <button id="make-payment">Make Payment</button>
 
             </div>
         </div>
@@ -93,6 +94,7 @@
     </div>
     <script>
         var shipping = "{{order.shipping}}"
+        var user = '{{request.user}}'
     </script>
     <script type="text/javascript" src="{% static 'js/shipping.js' %}"></script>
     {% endblock content %}
