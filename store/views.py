@@ -7,6 +7,7 @@ from Ecommerce_Project import settings
 from django.http import JsonResponse
 import json
 import requests
+import datetime as dt
 
 
 #from django.views.generic.detail import DetailView
@@ -16,6 +17,9 @@ import requests
 
 
 def home(request):
+    """If not exists an order, create a new one everytime the home url is request. Also, only get the orders when complete is False, if a order is complete=True, 
+    the order does'nt shows and create a new one. """
+
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
@@ -121,6 +125,33 @@ def update_item(request):
 
 def process_order(request):
     print('Data:', request.body)
+    transaction_id = dt.datetime.now().timestamp()
+    data = json.loads(request.body)
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
+        total = data['form']['total']
+        #total = total.replace(".", "")
+        order.transaction_id = transaction_id
+        print(total)
+        print(order.get_cart_total)
+
+        if int(total) == int(order.get_cart_total):
+            order.complete = True
+            order.save()
+
+        if order.shipping == True:
+            Shipping_Address.objects.create(
+                customer=customer,
+                order=order,
+                address=data['shipping']['address'],
+                city=data['shipping']['city'],
+                state=data['shipping']['state'],
+                zipcode=data['shipping']['zipcode'],
+            )
+    else:
+        print("User is not logged in...")
     return JsonResponse('Payment complete', safe=False)
 
 
