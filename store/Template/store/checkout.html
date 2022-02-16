@@ -95,6 +95,8 @@
     <script>
         var shipping = "{{order.shipping}}"
         var user = '{{request.user}}'
+        var total = '{{order.get_cart_total|intcomma}}'
+        var home_url = "{% url 'store' %}"
     </script>
     <script type="text/javascript" src="{% static 'js/shipping.js' %}"></script>
     {% endblock content %}

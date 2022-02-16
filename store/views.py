@@ -119,6 +119,11 @@ def update_item(request):
     return JsonResponse("Item was added", safe=False)
 
 
+def process_order(request):
+    print('Data:', request.body)
+    return JsonResponse('Payment complete', safe=False)
+
+
 def contact_us(request):
     f = ContactForm(request.POST)
     if f.is_valid():

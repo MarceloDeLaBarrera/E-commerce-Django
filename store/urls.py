@@ -8,6 +8,7 @@ urlpatterns = [
     path("product/<slug:slug>/", views.product_detail, name="product-detail"),
     #path("product/<slug:slug>/",views.ProductDetailView.as_view(), name="product-detail"),
     path("update_item/", views.update_item, name="update-item"),
+    path("process_order/", views.process_order, name="process-order"),
     path("contact-us/", views.contact_us, name="contact"),
 
 ]
