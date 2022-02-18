@@ -15,6 +15,7 @@ for (var i = 0; i < updateBtns.length; i++) {
   });
 }
 
+//Functionality to add or remove items from the cart when usser is guest
 function addCookieItem(productID, action) {
   console.log("Not logged in");
   if (action == "add") {
@@ -39,6 +40,7 @@ function addCookieItem(productID, action) {
   location.reload();
 }
 
+//Send the data of product id and action on the body of the request.
 function updateUserOrder(productID, action) {
   console.log("User is logged, sending data...");
 

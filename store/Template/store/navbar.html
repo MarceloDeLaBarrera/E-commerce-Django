@@ -22,7 +22,9 @@
                 <a href="{% url 'cart' %}">
                     <img id="cart-icon" src="{% static 'image/cart.png' %}">
                 </a>
-                <p id="cart-total">{{order.get_cart_items|intcomma}}</p>
+                <p id="cart-total">{{order.get_cart_items}}</p>
+
+
 
             </div>
         </div>

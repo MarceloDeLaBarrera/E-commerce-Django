@@ -8,6 +8,7 @@ from django.http import JsonResponse
 import json
 import requests
 import datetime as dt
+from .utils import cookie_cart
 
 
 #from django.views.generic.detail import DetailView
@@ -26,8 +27,8 @@ def home(request):
             customer=customer, complete=False)
         items = order.product_order_set.all()
     else:
-        items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
+        cookie_data = cookie_cart(request)
+        order = cookie_data['order']
 
     products = Product.objects.all().order_by("name")
 
@@ -43,12 +44,14 @@ def cart(request):
 
         # Items is access to all the order items in that order. Father class= Order. Child Class= Product_Order (order detail).
         items = order.product_order_set.all()
-    else:
-        # a list, queryset empty.
-        items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
 
-    context = {"items": items, "order": order, "shipping": False}
+    # Guest User
+    else:
+        cookie_data = cookie_cart(request)
+        order = cookie_data['order']
+        items = cookie_data['items']
+
+    context = {"items": items, "order": order}
     return render(request, 'store/cart.html', context)
 
 
@@ -61,9 +64,9 @@ def checkout(request):
         # Items is access to all the order items in that order. Father class= Order. Child Class= Product_Order (order detail).
         items = order.product_order_set.all()
     else:
-        # a list, queryset empty.
-        items = []
-        order = {"get_cart_total": 0, "get_cart_items": 0}
+        cookie_data = cookie_cart(request)
+        order = cookie_data['order']
+        items = cookie_data['items']
 
     context = {"items": items, "order": order, "shipping": False}
     return render(request, 'store/checkout.html', context)
@@ -131,11 +134,9 @@ def process_order(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
             customer=customer, complete=False)
+
         total = data['form']['total']
-        #total = total.replace(".", "")
         order.transaction_id = transaction_id
-        print(total)
-        print(order.get_cart_total)
 
         if int(total) == int(order.get_cart_total):
             order.complete = True
