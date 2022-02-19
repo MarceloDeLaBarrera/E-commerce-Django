@@ -1,5 +1,6 @@
 body{
 	background-color: hsl(0, 0%, 98%);
+	overflow-y: scroll;
 }
 
 h1,h2,h3,h4,h5,h6{
@@ -7,8 +8,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 h4{
-float: right;
-padding-top: 2px;
+padding-top: 2px;	
 }
 
 
@@ -21,6 +21,8 @@ p.btn-checkout{
 	background-color: #fff;
 	border-radius: 4px;
 	padding: 10px;
+	display: flexbox;
+	
 }
 
 .thumbnail{
@@ -61,10 +63,15 @@ p.btn-checkout{
 .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12{
 	margin-bottom: 10px;
 	padding-top: 10px;
+	
+
+
 }
 .col-md-6{
 	padding-right:  30px;
 }
+
+
 
 .btn{
 	border-radius: 0;
@@ -122,16 +129,3 @@ p.btn-checkout{
 	height:30px;
 }
 
-/*
-.chg-quantity{
-	width: 12px;
-	cursor: pointer;
-	display: block;
-	margin-top: 5px;
-	transition:.1s;
-}
-
-.chg-quantity:hover{
-	opacity: .6;
-}
-*/
