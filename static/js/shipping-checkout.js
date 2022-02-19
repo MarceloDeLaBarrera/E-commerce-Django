@@ -64,6 +64,10 @@ function submitFormData() {
     .then((data) => {
       console.log("Success: ", data);
       alert("Transacción Completada");
+
+      //Set cart to empty to clear cookies, and redirect to home page. That's because when a order is complete, we need to clean the cart.
+      cart = {};
+      document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
       window.location.href = home_url;
     });
 }

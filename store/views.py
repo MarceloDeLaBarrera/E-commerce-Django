@@ -25,7 +25,6 @@ def home(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
             customer=customer, complete=False)
-        items = order.product_order_set.all()
     else:
         cookie_data = cookie_cart(request)
         order = cookie_data['order']
@@ -74,9 +73,18 @@ def checkout(request):
 
 def product_detail(request, slug):
     product_detail = get_object_or_404(Product, slug=slug)
-    context = {'product': product_detail}
     product_detail.view_count += 1
     product_detail.save()
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(
+            customer=customer, complete=False)
+    else:
+        cookie_data = cookie_cart(request)
+        order = cookie_data['order']
+
+    context = {'product': product_detail, "order": order}
     return render(request, 'store/productdetail.html', context)
 
 
