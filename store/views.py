@@ -8,7 +8,7 @@ from django.http import JsonResponse
 import json
 import requests
 import datetime as dt
-from .utils import cookie_cart
+from .utils import cookie_cart, cart_data, guest_order
 
 
 #from django.views.generic.detail import DetailView
@@ -21,13 +21,8 @@ def home(request):
     """If not exists an order, create a new one everytime the home url is request. Also, only get the orders when complete is False, if a order is complete=True, 
     the order does'nt shows and create a new one. """
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
+    data = cart_data(request)
+    order = data['order']
 
     products = Product.objects.all().order_by("name")
 
@@ -36,36 +31,20 @@ def home(request):
 
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
 
-        # Items is access to all the order items in that order. Father class= Order. Child Class= Product_Order (order detail).
-        items = order.product_order_set.all()
-
-    # Guest User
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
-        items = cookie_data['items']
+    data = cart_data(request)
+    order = data['order']
+    items = data['items']
 
     context = {"items": items, "order": order}
     return render(request, 'store/cart.html', context)
 
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
 
-        # Items is access to all the order items in that order. Father class= Order. Child Class= Product_Order (order detail).
-        items = order.product_order_set.all()
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
-        items = cookie_data['items']
+    data = cart_data(request)
+    order = data['order']
+    items = data['items']
 
     context = {"items": items, "order": order, "shipping": False}
     return render(request, 'store/checkout.html', context)
@@ -76,13 +55,8 @@ def product_detail(request, slug):
     product_detail.view_count += 1
     product_detail.save()
 
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-    else:
-        cookie_data = cookie_cart(request)
-        order = cookie_data['order']
+    data = cart_data(request)
+    order = data['order']
 
     context = {'product': product_detail, "order": order}
     return render(request, 'store/productdetail.html', context)
@@ -110,9 +84,10 @@ def update_item(request):
     action = data['action']
     print('Action:', action, 'ProductID: ', productID)
 
-    customer = request.user.customer
     # Get a single product by id.
     product = Product.objects.get(id=productID)
+
+    customer = request.user.customer
     # Get or create if not exists the order for the customer.
     order, created = Order.objects.get_or_create(
         customer=customer, complete=False)
@@ -138,29 +113,32 @@ def process_order(request):
     print('Data:', request.body)
     transaction_id = dt.datetime.now().timestamp()
     data = json.loads(request.body)
+
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(
             customer=customer, complete=False)
 
-        total = data['form']['total']
-        order.transaction_id = transaction_id
-
-        if int(total) == int(order.get_cart_total):
-            order.complete = True
-            order.save()
-
-        if order.shipping == True:
-            Shipping_Address.objects.create(
-                customer=customer,
-                order=order,
-                address=data['shipping']['address'],
-                city=data['shipping']['city'],
-                state=data['shipping']['state'],
-                zipcode=data['shipping']['zipcode'],
-            )
     else:
-        print("User is not logged in...")
+        customer, order = guest_order(request, data)
+
+    if order.shipping == True:
+        Shipping_Address.objects.create(
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
+        )
+
+    total = data['form']['total']
+    order.transaction_id = transaction_id
+
+    if int(total) == int(order.get_cart_total):
+        order.complete = True
+        order.save()
+
     return JsonResponse('Payment complete', safe=False)
 
 
@@ -194,4 +172,9 @@ def contact_us(request):
     else:
         result = ""
 
-    return render(request, "store/contact.html", {"form": f, "recaptcha_site_key": settings.GOOGLE_RECAPTCHA_SITE_KEY, "result": result})
+    data = cart_data(request)
+    order = data['order']
+    context = {"form": f, "recaptcha_site_key": settings.GOOGLE_RECAPTCHA_SITE_KEY,
+               "result": result, "order": order}
+
+    return render(request, "store/contact.html", context)

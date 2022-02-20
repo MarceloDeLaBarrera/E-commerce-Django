@@ -21,8 +21,8 @@ class Order_admin(admin.ModelAdmin):
     list_per_page = 15
 
 
-# class Product_Order(admin.ModelAdmin):
-#    list_display = ("order", "product", "quantity", "date")
+class Product_Order_Admin(admin.ModelAdmin):
+    list_display = ("order", "product", "quantity", "date")
 
 
 class Shipping_Adress_admin(admin.ModelAdmin):
@@ -32,6 +32,6 @@ class Shipping_Adress_admin(admin.ModelAdmin):
 admin.site.register(Customer, Customer_admin)
 admin.site.register(Product, Product_admin)
 admin.site.register(Order, Order_admin)
-admin.site.register(Product_Order)
+admin.site.register(Product_Order, Product_Order_Admin)
 admin.site.register(Shipping_Address, Shipping_Adress_admin)
 admin.site.register(Category)

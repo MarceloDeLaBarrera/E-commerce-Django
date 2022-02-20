@@ -15,7 +15,7 @@ for (var i = 0; i < updateBtns.length; i++) {
   });
 }
 
-//Functionality to add or remove items from the cart when usser is guest
+//Functionality to add or remove items from the cart when usser is guest. We also fill the object cart adding the key/value --> producID/quantity.
 function addCookieItem(productID, action) {
   console.log("Not logged in");
   if (action == "add") {
@@ -40,7 +40,7 @@ function addCookieItem(productID, action) {
   location.reload();
 }
 
-//Send the data of product id and action on the body of the request.
+//Send the data of product id and action on the body of the request when user is logged.
 function updateUserOrder(productID, action) {
   console.log("User is logged, sending data...");
 
