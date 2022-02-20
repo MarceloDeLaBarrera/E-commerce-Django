@@ -12,6 +12,8 @@ if (shipping == "False" && user != "AnonymousUser") {
 }
 
 var form = document.getElementById("form");
+csrftoken = form.getElementsByTagName("input")[0].value;
+console.log("Newtoken: ", csrftoken);
 
 form.addEventListener("submit", function (e) {
   e.preventDefault();
